@@ -14,5 +14,6 @@ router.get('/oneToOne',userControlle.oneToOne)
 router.get('/belongsTo',userControlle.belongsTo)
 router.get('/oneToMany',userControlle.oneToMany)
 router.get('/manyToMany',userControlle.manyToMany)
+router.get('/scope',userControlle.scope)
 
 module.exports=router

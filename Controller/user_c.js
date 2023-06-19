@@ -5,6 +5,7 @@ const User = db.user;
 const Posts = db.posts;
 const Tags = db.tags;
 const Post_Tag = db.post_tag;
+const Reviews=db.reviews;
 
 const addUser = async (req, res) => {
   console.log("hisoghel");
@@ -299,6 +300,7 @@ const belongsTo = async (req, res) => {
 
   const data = await Posts.findAll({
     attributes: ["content", "title"],
+    // where:{'$UserInfo.age$':22},
     include: [
       { model: User, as: "UserInfo", attributes: ["username", "email"] },
     ],
@@ -322,7 +324,9 @@ const oneToMany = async (req, res) => {
       {
         model: Posts,
         as: "PostInfo",
-        attributes: ["title", ["name", "PostName"]],
+        // attributes: ["title", ["name", "PostName"]],
+        // where:{title:'cyclone'},
+        required: true,
       },
     ],
     // where: { user_id: 1 },
@@ -341,7 +345,7 @@ const manyToMany = async (req, res) => {
   //   title: "Cricket",
   //   content: "Cricket details",
   // });
-  
+
   // -------Post to Tag---------
   // const data = await Posts.findAll({
   //   attributes:['title','content'],
@@ -353,10 +357,23 @@ const manyToMany = async (req, res) => {
 
   // ---Tag to Post------------
   const data = await Tags.findAll({
-    include:[{
-          model:Posts,
-        }]
+    include: [
+      {
+        model: Posts,
+      },
+    ],
   });
+
+  res.status(200).json({
+    msg: "done",
+    status: data,
+  });
+};
+
+// --------------Scope--------------------
+const scope = async (req, res) => {
+
+  const data = await Reviews.scope('deleted').findAll({});
 
   res.status(200).json({
     msg: "done",
@@ -377,4 +394,5 @@ module.exports = {
   belongsTo,
   oneToMany,
   manyToMany,
+  scope,
 };
